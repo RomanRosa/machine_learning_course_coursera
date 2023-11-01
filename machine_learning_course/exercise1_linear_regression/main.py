@@ -63,3 +63,42 @@ def plotData(X, y):
     plt.show()
 
 plotData(X, y)
+
+# 5x5 Identity Matrix
+def warmupExercise():
+    return np.identity(5)
+
+warmupExercise()
+
+# The objective of linear regression is to minimize the cost function:
+# J(\Theta) = \frac{1}{2m} \sum_{i=1}^m (h_{\Theta}(x^{(i)}) - y^{(i)})^2
+
+# Where the hypothesis function is given by the linear model:
+# h_{\Theta}(x) = \vec{\Theta}^{\top} \vec{x}
+def computeCost(X, y, theta):
+    m = y.size
+    predictions = X.dot(theta)
+    sqerror = (predictions - y)**2
+    J = 1/(2*m) * np.sum(sqerror)
+    return J
+
+theta1 = np.zeros((2,1))
+theta2 = np.array([[-1],[2]])
+a = computeCost(X, y, theta1)
+b = computeCost(X, y, theta2)
+print('The Predicted Parameters are:' + '\n' + '%0.2f and %0.2f'%(a,b))
+
+# In batch gradient descent, each iteration performs the update
+
+# repeat until convergence: {
+#   theta_j := theta_j - alpha * 1/m * sum(h_theta(x^{(i)}) - y^{(i)}) * x^{(i)}_j
+# }
+def gradientDescent(X, y, theta, alpha, num_iters):
+    m = y.size
+    J_history = []
+    for _ in range(num_iters):
+        errors = X.dot(theta) - y
+        delta = np.dot(X.T, errors)
+        theta = theta - ((alpha / m) * delta)
+        J_history.append(computeCost(X, y, theta))
+        return theta, J_history
